@@ -1,6 +1,7 @@
 %title: Poor Man's Parallel Pipelines
 %author: Jeroen Janssens - @jeroenhjanssens
 %date: 2015-05-07
+%note: Run presentation with `mdp README.md` # https://github.com/visit1985/mdp
 
 
 
@@ -21,6 +22,8 @@
 
 -> 2015-05-07 <-
 
+
+-> _bit.ly/strata-parallel_ <-
 
 ------------------------------------------------------------------------------
 
@@ -149,11 +152,8 @@ ls
 Cartesian product of year and page:
 
 	$ parallel -j1 --progress --delay 0.1 --results results "curl -sL " \
-^
 	> "'http://api.nytimes.com/svc/search/v2/articlesearch.json?q=New+'"\
-^
 	> "'York+Fashion+Week&begin_date={1}0101&end_date={1}1231&page={2}'"\
-^
 	> "'&api-key=${KEY}'" ::: {2009..2013} ::: {0..99} > /dev/null
 ^
 	
