@@ -164,14 +164,14 @@ On Microsoft Windows:
 ^
 -> *More than 100 command-line options!* <-
 
-
 ------------------------------------------------------------------------------
 
 # Usage: Working with files
 
 
-	$ ls logs/*.log | parallel "grep ERROR {}"
+List files using `ls` and pipe that to `paralell`:
 
+	$ ls logs/*.log | parallel "grep ERROR {}"
 
 ------------------------------------------------------------------------------
 
@@ -227,6 +227,9 @@ Use `head` and `csvlook` (from csvkit) to inspect data set:
 
 # Usage: Specifying number of concurrent jobs  
 
+By default one job per core.
+
+Just 10 jobs:
 
 	$ cat input | parallel --jobs 10
 
@@ -234,9 +237,11 @@ Twice the number of cores:
 
 	$ cat input | parallel --jobs 200%
 
-Sometimes you only want one job at a time
+Sometimes you only want one job at a time:
 
 	$ cat input | parallel -j1
+
+Use `htop` to see if you're maxing out your CPUs
 
 ------------------------------------------------------------------------------
 
@@ -391,7 +396,7 @@ Top n words in R:
 
 ------------------------------------------------------------------------------
 
-# Making sure your code is on the remote instances
+# Example: Kinda like map reduce
 
 
 Custom command-line tool that outputs sum of numbers:
@@ -419,10 +424,6 @@ Custom command-line tool that outputs sum of numbers:
 
 ------------------------------------------------------------------------------
 
-# Usage: Split standard input
-
-------------------------------------------------------------------------------
-
 # Conclusion
 
 
@@ -434,7 +435,6 @@ Custom command-line tool that outputs sum of numbers:
 
 - Book signing session in the afternoon break
 - 50% discount code during Strata London: *TS2015*
-
 
 ------------------------------------------------------------------------------
 
