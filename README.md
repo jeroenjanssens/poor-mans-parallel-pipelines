@@ -60,9 +60,9 @@ You have a one-off data science task that could use some speeding up
 For example:
 
 - Make many API calls
-- Try various settings a machine learning algorithm
-- Process many data sets
-- Distribute click stream to multiple processes
+- Try various settings of a machine learning algorithm
+- Process many log files
+- Distribute streaming data to multiple processes
 - Get statistics from all your remote instances
 
 
@@ -77,6 +77,7 @@ For example:
 - Storm
 - Flink
 
+^
 However:
 
 - Perhaps not worthwhile to set up
@@ -91,7 +92,7 @@ However:
 - Unix command-line tool created by Ole Tange
 - Easy to install and configure
 - Parallelize and distribute ordinary pipelines
-- Loops over files, lines, arguments, hosts
+- Loops over files, lines, arguments, machines
 - Assumption: task is splittable
 
 ------------------------------------------------------------------------------
@@ -120,6 +121,8 @@ On Microsoft Windows:
 # GNU Parallel is a for loop on steroids
 
 
+Plain bash:
+
 	$ for i in $(seq 5); do echo "Hi $i"; done
 ^
 	Hi 1
@@ -128,6 +131,8 @@ On Microsoft Windows:
 	Hi 4
 	Hi 5
 ^
+
+GNU Parallel:
 
 	$ seq 5 | parallel "echo Hi {}"
 ^
@@ -169,7 +174,7 @@ On Microsoft Windows:
 # Usage: Working with files
 
 
-List files using `ls` and pipe that to `paralell`:
+List files using `ls` and pipe that to `parallel`:
 
 	$ ls logs/*.log | parallel "grep ERROR {}"
 
@@ -193,6 +198,7 @@ Example:
 Other placeholders:
 
 - `{1}` : first argument
+- `{2}` : second argument
 - `{#}` : job number
 
 ------------------------------------------------------------------------------
@@ -227,6 +233,7 @@ Use `head` and `csvlook` (from csvkit) to inspect data set:
 
 # Usage: Specifying number of concurrent jobs  
 
+
 By default one job per core.
 
 Just 10 jobs:
@@ -241,7 +248,7 @@ Sometimes you only want one job at a time:
 
 	$ cat input | parallel -j1
 
-Use `htop` to see if you're maxing out your CPUs
+Tip: use `htop` to see if you're maxing out your CPUs
 
 ------------------------------------------------------------------------------
 
@@ -287,6 +294,21 @@ Combine output using `cat`:
 	$ cat results/1/*/2/*/stdout
 
 ------------------------------------------------------------------------------
+ 
+# Usage: Executing pipeline on remote instances
+
+
+Get hostname of all instances:
+
+	$ parallel --nonall --sshloginfile instances hostname
+	ip-172-31-23-204
+	ip-172-31-23-205
+
+Install GNU Parallel:
+
+	$ parallel --nonall --slf instances "sudo apt-get install -y parallel"
+
+------------------------------------------------------------------------------
 
 # Aside: Obtain list of EC2 instances 
 
@@ -309,28 +331,12 @@ Combine output using `cat`:
 	ec2-54-88-122-140.compute-1.amazonaws.com
 	ec2-54-88-89-208.compute-1.amazonaws.com
 
-
-------------------------------------------------------------------------------
- 
-# Usage: Executing pipeline on remote instances
-
-
-Get hostname of all instances:
-
-	$ parallel --nonall --sshloginfile instances hostname
-	ip-172-31-23-204
-	ip-172-31-23-205
-
-Install GNU Parallel:
-
-	$ parallel --nonall --slf instances "sudo apt-get install -y parallel"
-
 ------------------------------------------------------------------------------
 
 # Parallelizing your Python or R code
 
-Recipe to create reusable command-line tool:
 
+Six-step recipe to create a reusable command-line tool:
 
 1. Copy and paste code into a file
 2. Add execute permissions using `chmod`
@@ -396,7 +402,7 @@ Top n words in R:
 
 ------------------------------------------------------------------------------
 
-# Example: Kinda like map reduce
+# Example: Using your command-line tool remotely
 
 
 Custom command-line tool that outputs sum of numbers:
